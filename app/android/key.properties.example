@@ -1,0 +1,7 @@
+# Karing+ APK signing. The keystore is not in the repository: generate your own (see BUILDING.md),
+# copy this file to key.properties and fill in your values. key.properties and *.keystore / *.jks
+# are ignored by git. Without key.properties the APK is signed with the local Android debug key.
+storePassword.release=YOUR_STORE_PASSWORD
+keyPassword.release=YOUR_KEY_PASSWORD
+keyAlias.release=karingplus
+storeFile.release=../../karingplus.keystore

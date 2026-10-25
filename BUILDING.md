@@ -55,8 +55,21 @@ flutter build apk --release --target-platform android-arm,android-arm64
 flutter build linux --release
 ```
 
-Подпись APK: заполните `app/android/key.properties` (поля `*.release`) своим keystore.
-Чтобы обновления ставились поверх, все версии нужно подписывать одним и тем же ключом.
+### Подпись APK — ключ генерируете сами
+
+Ключ подписи в репозиторий **не входит** и не будет выкладываться: каждый, кто собирает Karing+,
+создаёт свой. Сборка, подписанная вашим ключом, не встанет обновлением поверх официальной (и наоборот) —
+так и задумано.
+
+```bash
+keytool -genkeypair -v -keystore karingplus.keystore -alias karingplus \
+  -keyalg RSA -keysize 4096 -validity 10000
+cp app/android/key.properties.example app/android/key.properties
+# впишите в key.properties пароли и путь к karingplus.keystore
+```
+
+Без `key.properties` APK подписывается локальным отладочным ключом Android.
+Чтобы ваши обновления ставились поверх, подписывайте все версии одним и тем же ключом и храните его в надёжном месте.
 
 ## 5. Установщики
 

@@ -11,3 +11,4 @@ app/bind/windows/core/
 app/bind/windows/zapret/
 app/bind/linux/core/
 installer/sandbox/result.txt
+app/android/key.properties
