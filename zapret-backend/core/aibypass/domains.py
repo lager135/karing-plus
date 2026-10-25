@@ -1,0 +1,27 @@
+"""AI domains database with source URLs for foreign IPs."""
+AI_DOMAINS = {
+    "openai": {
+        "domains": ["chatgpt.com", "ab.chatgpt.com", "openai.com", "oaistatic.com", "oaiusercontent.com", "sora.com", "chat.openai.com", "auth.openai.com", "platform.openai.com"],
+        "source": "https://raw.githubusercontent.com/Flowseal/zapret-discord-youtube/main/lists/list-general.txt",
+        "fallback_ip": "",
+    },
+    "anthropic": {"domains": ["claude.ai", "anthropic.com", "console.anthropic.com"], "source": "https://raw.githubusercontent.com/azzimoda/zapret-lists/main/list-general-user.txt", "fallback_ip": ""},
+    "google": {"domains": ["gemini.google.com", "aistudio.google.com", "makersuite.google.com", "bard.google.com"], "source": "https://raw.githubusercontent.com/Flowseal/zapret-discord-youtube/main/lists/list-general.txt", "fallback_ip": ""},
+    "xai": {"domains": ["grok.com", "x.ai", "accounts.x.ai"], "source": "https://raw.githubusercontent.com/azzimoda/zapret-lists/main/list-general-user.txt", "fallback_ip": ""},
+    "deepl": {"domains": ["deepl.com", "api.deepl.com"], "source": "https://raw.githubusercontent.com/Flowseal/zapret-discord-youtube/main/lists/list-general.txt", "fallback_ip": ""},
+    "copilot": {"domains": ["copilot.microsoft.com", "github.com"], "source": "https://raw.githubusercontent.com/azzimoda/zapret-lists/main/list-general-user.txt", "fallback_ip": ""},
+    "spotify": {"domains": ["spotify.com", "scdn.co", "spotifycdn.com", "open.spotify.com", "accounts.scdn.co"], "source": "https://raw.githubusercontent.com/azzimoda/zapret-lists/main/list-general-user.txt", "fallback_ip": ""},
+    "discord": {"domains": ["discord.com", "discord.gg", "discordapp.net", "dis.gd", "discordapp.com"], "source": "https://raw.githubusercontent.com/azzimoda/zapret-lists/main/list-general-user.txt", "fallback_ip": ""},
+    "youtube": {"domains": ["youtube.com", "youtu.be", "googlevideo.com", "ytimg.com", "youtubei.googleapis.com"], "source": "https://raw.githubusercontent.com/Flowseal/zapret-discord-youtube/main/lists/list-google.txt", "fallback_ip": ""},
+    "twitch": {"domains": ["twitch.tv", "ttvnw.net", "jtvnw.net"], "source": "https://raw.githubusercontent.com/azzimoda/zapret-lists/main/list-general-user.txt", "fallback_ip": ""},
+    "instagram": {"domains": ["instagram.com", "cdninstagram.com", "ig.me"], "source": "https://raw.githubusercontent.com/Flowseal/zapret-discord-youtube/main/lists/list-general.txt", "fallback_ip": ""},
+    "facebook": {"domains": ["facebook.com", "fbcdn.net", "fb.com", "messenger.com"], "source": "https://raw.githubusercontent.com/Flowseal/zapret-discord-youtube/main/lists/list-general.txt", "fallback_ip": ""},
+    "whatsapp": {"domains": ["whatsapp.com", "whatsapp.net", "wa.me"], "source": "https://raw.githubusercontent.com/Flowseal/zapret-discord-youtube/main/lists/list-general.txt", "fallback_ip": ""},
+    "telegram": {"domains": ["telegram.org", "t.me", "telegram.me", "telesco.pe"], "source": "https://raw.githubusercontent.com/azzimoda/zapret-lists/main/list-general-user.txt", "fallback_ip": ""},
+    "signal": {"domains": ["signal.org", "whispersystems.org"], "source": "https://raw.githubusercontent.com/azzimoda/zapret-lists/main/list-general-user.txt", "fallback_ip": ""},
+    "steam": {"domains": ["steamcommunity.com", "steampowered.com", "steamstatic.com", "steamcontent.com"], "source": "https://raw.githubusercontent.com/azzimoda/zapret-lists/main/list-general-user.txt", "fallback_ip": ""},
+    "github": {"domains": ["github.com", "githubusercontent.com", "githubassets.com", "github.io"], "source": "https://raw.githubusercontent.com/azzimoda/zapret-lists/main/list-general-user.txt", "fallback_ip": ""},
+    "docker": {"domains": ["docker.com", "docker.io", "hub.docker.com"], "source": "https://raw.githubusercontent.com/Flowseal/zapret-discord-youtube/main/lists/list-general.txt", "fallback_ip": ""},
+    "ubisoft": {"domains": ["ubisoft.com", "uplay.com", "ubi.com"], "source": "https://raw.githubusercontent.com/azzimoda/zapret-lists/main/list-general-user.txt", "fallback_ip": ""},
+    "riot": {"domains": ["riotgames.com", "leagueoflegends.com", "valorant.com"], "source": "https://raw.githubusercontent.com/azzimoda/zapret-lists/main/list-general-user.txt", "fallback_ip": ""},
+}

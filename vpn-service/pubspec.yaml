@@ -1,0 +1,21 @@
+name: vpn_service
+description: VPN core plugin for Karing+ (Android VpnService with libbox; Windows core service with a TUN adapter).
+version: 1.1.0
+publish_to: none
+
+environment:
+  sdk: ">=3.2.3 <4.0.0"
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  path: ^1.9.0
+  path_provider: ^2.1.5
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: lfw.fly.vpn_service
+        pluginClass: VpnServicePlugin

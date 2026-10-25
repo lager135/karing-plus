@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Alpine Test</title>
+</head>
+<body style="background:#111;color:#fff;font-family:sans-serif;padding:40px">
+<h1>Alpine Minimal Test</h1>
+<div x-data="{ msg: 'If you see this in green, Alpine works!' }">
+  <p style="color:#00ff88;font-size:20px" x-text="msg"></p>
+  <p>Counter: <span x-text="count || 0"></span></p>
+  <button @click="count = (count || 0) + 1" style="padding:10px 20px;font-size:16px">Click me</button>
+</div>
+<hr style="margin:40px 0">
+<div id="diag" style="color:#888;font-family:monospace"></div>
+<script>
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('diag').textContent =
+      'typeof Alpine = ' + typeof Alpine + '\n' +
+      'x-cloak removed = ' + !document.body.hasAttribute('x-cloak');
+  }, 500);
+});
+</script>
+<script defer src="/static/vendor/alpine.min.js?v=20261014"></script>
+</body>
+</html>

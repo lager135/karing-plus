@@ -1,0 +1,18 @@
+<Configuration>
+  <!-- Karing+ installer test: install, then update over it, in a throwaway Windows Sandbox. -->
+  <MappedFolders>
+    <MappedFolder>
+      <HostFolder>D:\dock\karingplus-dist</HostFolder>
+      <SandboxFolder>C:\dist</SandboxFolder>
+      <ReadOnly>true</ReadOnly>
+    </MappedFolder>
+    <MappedFolder>
+      <HostFolder>D:\dock\karingplus-installer\sandbox</HostFolder>
+      <SandboxFolder>C:\test</SandboxFolder>
+      <ReadOnly>false</ReadOnly>
+    </MappedFolder>
+  </MappedFolders>
+  <LogonCommand>
+    <Command>powershell -ExecutionPolicy Bypass -File C:\test\run-test.ps1</Command>
+  </LogonCommand>
+</Configuration>

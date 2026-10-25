@@ -1,0 +1,13 @@
+build/
+dist/
+.dart_tool/
+.gradle/
+__pycache__/
+*.keystore
+*.jks
+local.properties
+*.aar
+app/bind/windows/core/
+app/bind/windows/zapret/
+app/bind/linux/core/
+installer/sandbox/result.txt
