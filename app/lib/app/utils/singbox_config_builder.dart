@@ -1328,8 +1328,9 @@ class SingboxConfigBuilder {
       "outbound": kOutboundTagDns,
     });
 
-    // Karing+: Russian sites go direct on desktop, in every mode, and are resolved by the direct DNS.
-    if ((Platform.isWindows || Platform.isLinux) && setting.bypassRuSites) {
+    // Karing+: Russian sites go direct (Android: also for apps outside RuApps), in every mode, and are resolved by the direct DNS.
+    if ((Platform.isWindows || Platform.isLinux || Platform.isAndroid) &&
+        setting.bypassRuSites) {
       route.rules.add({
         "domain_suffix": RuSites.domainSuffixes,
         "outbound": kOutboundTagDirect,

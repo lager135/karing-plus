@@ -194,26 +194,27 @@ class FlutterVpnService {
     }
   }
 
-  // --- zapret (Windows) --------------------------------------------------------
+  // --- zapret (Windows: winws, Linux: nfqws) -------------------------------------
 
   /// Starts or stops the bundled zapret backend through the core service.
-  /// [servicePath] is karingService.exe next to the app.
+  /// [servicePath] is the core service binary next to the app.
   static Future<VpnServiceResultError?> zapretSet(
       String servicePath, bool enable) async {
-    if (!Platform.isWindows) {
-      return VpnServiceResultError('zapret is available on Windows only');
-    }
-    return WindowsBackend.zapretSet(servicePath, enable);
+    if (Platform.isWindows) return WindowsBackend.zapretSet(servicePath, enable);
+    if (Platform.isLinux) return LinuxBackend.zapretSet(servicePath, enable);
+    return VpnServiceResultError('zapret is available on Windows and Linux only');
   }
 
   static Future<bool> zapretRunning() async {
-    if (!Platform.isWindows) return false;
-    return WindowsBackend.zapretRunning();
+    if (Platform.isWindows) return WindowsBackend.zapretRunning();
+    if (Platform.isLinux) return LinuxBackend.zapretRunning();
+    return false;
   }
 
   static Future<ZapretInfo?> zapretInfo() async {
-    if (!Platform.isWindows) return null;
-    return WindowsBackend.zapretInfo();
+    if (Platform.isWindows) return WindowsBackend.zapretInfo();
+    if (Platform.isLinux) return LinuxBackend.zapretInfo();
+    return null;
   }
 
   // --- system proxy (Windows) -----------------------------------------------

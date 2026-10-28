@@ -7,7 +7,8 @@
 | `app/` | Приложение Karing+ (Flutter), форк [Karing](https://github.com/KaringX/karing) |
 | `vpn-service/` | Плагин `vpn_service`: Windows/Linux — через службу ядра, Android — VpnService + libbox |
 | `service/` | Служба ядра `karingService` (Go, sing-box 1.12): TUN, запуск zapret, systemd/служба Windows |
-| `zapret-backend/` | Бэкенд zapret для Windows (Python), стратегии и бинарники zapret |
+| `zapret-backend/` | Бэкенд zapret (Python): Windows — winws, Linux — nfqws + nftables/iptables; стратегии и списки |
+| `sing-box-patches/` | Патч sing-box v1.12.25: честный пинг (unified delay) |
 | `installer/inno/` | Установщик Windows (Inno Setup 6) |
 | `installer/linux/` | Установщик Linux одним файлом (`.run`) |
 
@@ -19,6 +20,17 @@
 - Windows: Visual Studio 2022 с C++ и ATL, Inno Setup 6
 - Linux: сборка на Ubuntu 24.04 (результат требует glibc 2.38+)
 - Python 3.12 + PyInstaller (бэкенд zapret)
+
+## 0. sing-box с патчем
+
+Служба ядра и libbox собираются из sing-box v1.12.25 с патчем честного пинга. Клонируйте его рядом
+с репозиторием (папка `../sing-box`, на неё указывает `replace` в `service/go.mod`):
+
+```bash
+git clone --branch v1.12.25 --depth 1 https://github.com/SagerNet/sing-box.git ../sing-box
+cd ../sing-box && git apply ../karing-plus/sing-box-patches/unified-delay.patch
+cp ../karing-plus/sing-box-patches/unified_delay_test.go common/urltest/ && go test ./common/urltest
+```
 
 ## 1. Служба ядра
 
@@ -40,9 +52,27 @@ pip install -r requirements.txt pyinstaller
 
 Содержимое собранной папки положите в `app/bind/windows/zapret/` (`backend/` и `zapret-web/`).
 
+## 2a. zapret для Linux (на Ubuntu 24.04)
+
+```bash
+sudo apt install build-essential libnetfilter-queue-dev libmnl-dev libnfnetlink-dev zlib1g-dev libcap-dev python3.12-venv
+# nfqws из исходников zapret (bol-van)
+git clone --depth 1 https://github.com/bol-van/zapret.git /tmp/zapret && make -C /tmp/zapret/nfq
+# бэкенд
+cd zapret-backend && python3 -m venv .venv && . .venv/bin/activate
+pip install fastapi uvicorn websockets psutil pyinstaller
+pyinstaller --onedir --name zapret-backend --collect-submodules core \
+  --hidden-import uvicorn.loops.auto --hidden-import uvicorn.protocols.http.auto \
+  --hidden-import uvicorn.protocols.websockets.auto --hidden-import uvicorn.lifespan.on app.py
+```
+
+Раскладка `app/bind/linux/zapret/`: `backend/` (собранный `dist/zapret-backend`) и `zapret-web/` (`static/` и
+`zapret/` без `.exe/.dll/.sys`, в `zapret/bin/` — `nfqws` и библиотеки `libnetfilter_queue.so.1`,
+`libnfnetlink.so.0`, `libmnl.so.0`). Бэкенд запускает `nfqws` с `LD_LIBRARY_PATH=bin`.
+
 ## 3. libbox для Android
 
-`libbox.aar` собирается из sing-box 1.12 через `gomobile bind` и кладётся в
+`libbox.aar` собирается из sing-box 1.12 (с патчем из шага 0) через `gomobile bind` и кладётся в
 `vpn-service/android/libs/libbox.aar` и `app/android/app/libs/libbox.aar`.
 
 ## 4. Приложение

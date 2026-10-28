@@ -274,6 +274,43 @@ class LinuxBackend {
     });
   }
 
+  // --- zapret (DPI bypass, nfqws) -------------------------------------------------
+  // Same API as on Windows: the service runs the zapret backend as root, the app talks to it
+  // on 127.0.0.1 with the per-start token.
+
+  static Future<VpnServiceResultError?> zapretSet(
+      String servicePath, bool enable) async {
+    final err = await installService(servicePath);
+    if (err != null) return err;
+    try {
+      final (code, data) = await _call(
+          'POST', enable ? '/zapret/start' : '/zapret/stop',
+          timeout: const Duration(seconds: 20));
+      if (code == 200) return null;
+      return VpnServiceResultError((data['error'] ?? 'zapret error $code').toString());
+    } catch (e) {
+      return VpnServiceResultError(e.toString());
+    }
+  }
+
+  static Future<bool> zapretRunning() async =>
+      (await zapretInfo())?.running ?? false;
+
+  /// Port and per-start token of the zapret backend, or null when the service does not answer.
+  static Future<ZapretInfo?> zapretInfo() async {
+    try {
+      final (code, data) = await _call('GET', '/zapret/state');
+      if (code != 200) return null;
+      return ZapretInfo(
+        running: data['running'] == true,
+        port: int.tryParse('${data['port'] ?? ''}') ?? 0,
+        token: '${data['token'] ?? ''}',
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
   static Future<FlutterVpnServiceState> currentState() async {
     try {
       final (code, data) = await _call('GET', '/state');

@@ -6,7 +6,7 @@
 
 #define MyAppName "Karing+"
 #ifndef MyAppVersion
-#define MyAppVersion "0.1.0_b"
+#define MyAppVersion "0.2.0_b"
 #endif
 #define MyAppPublisher "IceFusion"
 #define MyAppURL "https://github.com/lager135/karing-plus"
@@ -42,7 +42,7 @@ SolidCompression=yes
 WizardStyle=modern
 SetupLogging=yes
 CloseApplications=no
-VersionInfoVersion=0.1.0.704
+VersionInfoVersion=0.2.0.705
 
 [Languages]
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"

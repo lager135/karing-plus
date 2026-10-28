@@ -4,11 +4,11 @@
 
 **VPN-клиент для Windows, Android и Linux на базе [Karing](https://github.com/KaringX/karing)**
 
-[![Скачать для Windows](https://img.shields.io/badge/Скачать-Windows%2010%2F11-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/lager135/karing-plus/releases/download/v0.1.0_b/Karing%2B-0.1.0_b-Setup.exe)
-[![Скачать для Android](https://img.shields.io/badge/Скачать-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/lager135/karing-plus/releases/download/v0.1.0_b/Karing%2B-0.1.0_b-android.apk)
-[![Скачать для Linux](https://img.shields.io/badge/Скачать-Linux%20x64-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/lager135/karing-plus/releases/download/v0.1.0_b/Karing%2B-0.1.0_b-linux-x64.run)
+[![Скачать для Windows](https://img.shields.io/badge/Скачать-Windows%2010%2F11-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/lager135/karing-plus/releases/download/v0.2.0_b/Karing%2B-0.2.0_b-Setup.exe)
+[![Скачать для Android](https://img.shields.io/badge/Скачать-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/lager135/karing-plus/releases/download/v0.2.0_b/Karing%2B-0.2.0_b-android.apk)
+[![Скачать для Linux](https://img.shields.io/badge/Скачать-Linux%20x64-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/lager135/karing-plus/releases/download/v0.2.0_b/Karing%2B-0.2.0_b-linux-x64.run)
 
-[![Версия](https://img.shields.io/badge/версия-0.1.0__b%20(бета)-orange)](https://github.com/lager135/karing-plus/releases/tag/v0.1.0_b)
+[![Версия](https://img.shields.io/badge/версия-0.2.0__b%20(бета)-orange)](https://github.com/lager135/karing-plus/releases/tag/v0.2.0_b)
 [![Лицензия](https://img.shields.io/badge/лицензия-GPL--3.0-blue)](LICENSE.md)
 
 [Все релизы](https://github.com/lager135/karing-plus/releases) · [Сборка из исходников](BUILDING.md)
@@ -21,18 +21,19 @@
 
 | Платформа | Как поставить |
 |---|---|
-| **Windows 10/11 x64** | Запустите `Karing+-0.1.0_b-Setup.exe` — мастер установки. Новая версия ставится поверх старой, настройки сохраняются. |
-| **Android 7+** | Установите `Karing+-0.1.0_b-android.apk`. Ставится рядом с оригинальным Karing. |
-| **Linux x64** (Ubuntu 24.04+) | `sh Karing+-0.1.0_b-linux-x64.run` — установка или обновление; `--uninstall` — удаление. |
+| **Windows 10/11 x64** | Запустите `Karing+-0.2.0_b-Setup.exe` — мастер установки. Новая версия ставится поверх старой, настройки сохраняются. |
+| **Android 7+** | Установите `Karing+-0.2.0_b-android.apk`. Ставится рядом с оригинальным Karing. |
+| **Linux x64** (Ubuntu 24.04+) | `sh Karing+-0.2.0_b-linux-x64.run` — установка или обновление; `--uninstall` — удаление. |
 
 ## Что добавлено
 
 - **Режим TUN на Windows** — весь трафик системы идёт через VPN; переключатель на главном экране.
-- **Встроенный zapret на Windows** (обход DPI) — отдельная вкладка и режимы «VPN / Zapret / VPN+Zapret» с выбором стратегии.
+- **Встроенный zapret на Windows и Linux** — отдельная вкладка и режимы «VPN / Zapret / VPN+Zapret» с выбором стратегии (Linux: nfqws).
 - **Раздача Wi-Fi-хотспота на Windows** с VPN и/или zapret, настройка и QR-код прямо из приложения.
 - **Российские приложения в обход VPN на Android** — банки, Госуслуги, маркетплейсы, операторы.
-- **Российские сайты в обход VPN на Windows и Linux** — .ru, .su, .рф, Яндекс, VK и др.
-- **Главный экран:** время подключения, внешний IP, число соединений.
+- **Российские сайты в обход VPN на всех платформах** — .ru, .su, .рф, Яндекс, VK и др.
+- **Честный пинг** — как «unified delay» в mihomo: без времени установки соединения.
+- **Главный экран:** время подключения, внешний IP с флагом страны, число соединений.
 - **Проверка обновлений** по релизам этого репозитория (окно можно отложить на 24 часа).
 
 ## Что переработано

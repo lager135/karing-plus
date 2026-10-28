@@ -117,3 +117,7 @@ require (
 	google.golang.org/protobuf v1.36.6 // indirect
 	lukechampine.com/blake3 v1.3.0 // indirect
 )
+
+// Karing+: sing-box v1.12.25 with sing-box-patches/unified-delay.patch applied, cloned next to this
+// repository as ../sing-box (see BUILDING.md). The same source builds libbox for Android.
+replace github.com/sagernet/sing-box => ../sing-box

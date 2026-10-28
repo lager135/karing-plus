@@ -24,12 +24,12 @@ abstract final class AppUtils {
   // Karing+ versions follow its own git releases: X.Y.Z with bug fix = Z+1, small feature = Y+1,
   // big update = X+1. The fourth number is the build (Android versionCode) and only grows.
   static String getBuildinVersion() {
-    return "0.1.0.704";
+    return "0.2.0.705";
   }
 
   // The version shown to users and used in release file names.
   static String getDisplayVersion() {
-    return "0.1.0_b";
+    return "0.2.0_b";
   }
 
   static String getId() {

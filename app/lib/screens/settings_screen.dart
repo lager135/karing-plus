@@ -714,7 +714,7 @@ class _SettingScreenState extends LasyRenderingState<SettingsScreen> {
               onPush: () async {
                 await onTapDiversion();
               })),
-      Platform.isWindows || Platform.isLinux
+      Platform.isWindows || Platform.isLinux || Platform.isAndroid
           ? GroupItemOptions(
               switchOptions: GroupItemSwitchOptions(
                   name: "Российские сайты в обход VPN",
@@ -1216,8 +1216,8 @@ class _SettingScreenState extends LasyRenderingState<SettingsScreen> {
               })),
     ]));
 
-    // Karing+: built-in zapret (DPI bypass), run by the core service on Windows.
-    if (Platform.isWindows) {
+    // Karing+: built-in zapret (DPI bypass), run by the core service on Windows and Linux.
+    if (Platform.isWindows || Platform.isLinux) {
       final ruZ = settingConfig.languageTag.startsWith("ru");
       final zapretOn = await FlutterVpnService.zapretRunning();
       put("zapret", GroupItem(options: [

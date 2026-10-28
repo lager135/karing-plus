@@ -152,6 +152,8 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
   int _lastUploadTotal = 0;
   int _lastDownloadTotal = 0;
   final ValueNotifier<String> _exitIp = ValueNotifier<String>("");
+  // Karing+: ISO country code of the exit IP, shown as a flag next to it.
+  final ValueNotifier<String> _exitCountry = ValueNotifier<String>("");
   final ValueNotifier<String> _memory = ValueNotifier<String>("0 B");
   final ValueNotifier<String> _connInboundCount = ValueNotifier<String>("");
 
@@ -658,8 +660,11 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
   DateTime? _zLastTry;
   bool _zapretActive = false;
 
+  // Karing+: zapret runs on Windows (winws) and Linux (nfqws) through the core service.
+  static bool get _zapretPlatform => Platform.isWindows || Platform.isLinux;
+
   bool _zapretOnly() =>
-      Platform.isWindows && _bypassMode() == BypassMode.zapret;
+      _zapretPlatform && _bypassMode() == BypassMode.zapret;
 
   BypassMode _bypassMode() {
     final name = SettingManager.getConfig().bypassMode;
@@ -795,7 +800,7 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
     final mode = _bypassMode();
     final ru = SettingManager.getConfig().languageTag.startsWith("ru");
     final now = DateTime.now();
-    if (Platform.isWindows &&
+    if (_zapretPlatform &&
         mode != BypassMode.vpn &&
         _zStrategies.isEmpty &&
         !_modeBusy &&
@@ -841,7 +846,7 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
             padding: EdgeInsets.only(top: 6),
             child: SizedBox(width: 160, child: LinearProgressIndicator()),
           ),
-        if (Platform.isWindows && mode != BypassMode.vpn && _zStrategies.isNotEmpty)
+        if (_zapretPlatform && mode != BypassMode.vpn && _zStrategies.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 6),
             child: SizedBox(
@@ -863,6 +868,28 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
 
   /// Karing+: the public IP seen through the VPN (asked through the local proxy port).
   void _updateExitIp() async {
+    // api.country.is gives the IP and its country in one request through the proxy.
+    ReturnResult<String> withCountry = await HttpUtils.httpGetRequest(
+        "https://api.country.is/",
+        SettingManager.getConfig().proxy.mixedRulePort,
+        null,
+        const Duration(seconds: 5),
+        null,
+        null);
+    if (withCountry.error == null) {
+      try {
+        final map = jsonDecode(withCountry.data!) as Map<String, dynamic>;
+        final ip = (map["ip"] ?? "").toString().trim();
+        final country = (map["country"] ?? "").toString().trim().toUpperCase();
+        if (NetworkUtils.isIpv4(ip) || NetworkUtils.isIpv6(ip)) {
+          _exitCountry.value =
+              RegExp(r"^[A-Z]{2}$").hasMatch(country) ? country : "";
+          _exitIp.value = ip;
+          return;
+        }
+      } catch (_) {}
+    }
+    _exitCountry.value = "";
     for (final url in ["https://api.ipify.org", "https://checkip.amazonaws.com/"]) {
       ReturnResult<String> result = await HttpUtils.httpGetRequest(
           url,
@@ -879,6 +906,12 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
         }
       }
     }
+  }
+
+  // "SE" -> the flag emoji (two regional indicator symbols).
+  static String _countryFlag(String code) {
+    return String.fromCharCodes(
+        code.codeUnits.map((c) => 0x1F1E6 + c - 0x41));
   }
 
   void _updateWanIP() async {
@@ -1090,6 +1123,7 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
       _connectedAt = null;
       _lastTrafficAt = null;
       _exitIp.value = "";
+      _exitCountry.value = "";
       _checkSystemProxy();
       _disconnectToCurrent();
       _disconnectToService();
@@ -2250,8 +2284,8 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
                                   ),
                                 ),
                               ),
-                            // Karing+: zapret tab (Windows).
-                            if (Platform.isWindows)
+                            // Karing+: zapret tab (Windows: winws, Linux: nfqws).
+                            if (_zapretPlatform)
                               Tooltip(
                                 message: "Zapret",
                                 child: InkWell(
@@ -2611,7 +2645,7 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
                                   )
                                 : const SizedBox.shrink(),
                             // Karing+: bypass mode VPN / Zapret / VPN+Zapret, strategy below when zapret is on.
-                            if (Platform.isWindows) _buildBypassMode(),
+                            if (_zapretPlatform) _buildBypassMode(),
                             const SizedBox(
                               height: 10,
                             ),
@@ -3095,7 +3129,19 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.public, size: 18, color: color),
+                    ValueListenableBuilder<String>(
+                      valueListenable: _exitCountry,
+                      builder: (context, country, _) => country.isEmpty
+                          ? Icon(Icons.public, size: 18, color: color)
+                          : Text(
+                              _countryFlag(country),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily:
+                                    Platform.isWindows ? 'Emoji' : null,
+                              ),
+                            ),
+                    ),
                     const SizedBox(width: 5),
                     SelectableText(
                       ip,

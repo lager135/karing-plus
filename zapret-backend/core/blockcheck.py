@@ -94,7 +94,27 @@ def _test_url(url,timeout=8):
         with urlopen(Request(url,headers={"User-Agent":"Mozilla/5.0"}),timeout=timeout) as response: response.read(1024)
         return True,(time.time()-started)*1000
     except Exception: return False,-1.0
+def _test_strategy_linux(strategy,zapret_dir,targets,wait_sec,cancel_check):
+    # Linux: the strategy runs through nfqws + nftables (core/platforms/linux.py).
+    from core.platforms.linux import LinuxPlatform
+    runner=LinuxPlatform()
+    try:
+        ok,msg=runner.start(strategy,zapret_dir)
+        if not ok: return {"strategy":strategy,"ok":False,"error":msg}
+        deadline=time.time()+wait_sec
+        while time.time()<deadline:
+            if cancel_check and cancel_check(): return {"strategy":strategy,"ok":False,"error":"cancelled"}
+            time.sleep(0.3)
+        details={}
+        for target in targets:
+            if cancel_check and cancel_check(): return {"strategy":strategy,"ok":False,"error":"cancelled"}
+            ok,ms=_test_url(target); details[target]={"ok":ok,"ms":ms}
+        successful=[x["ms"] for x in details.values() if x["ok"] and x["ms"]>0]; score=sum(x["ok"] for x in details.values())
+        return {"strategy":strategy,"ok":score>0,"score":score,"total":len(targets),"avg_ms":sum(successful)/len(successful) if successful else 0,"details":details}
+    finally:
+        runner.stop()
 def test_strategy(strategy,zapret_dir,targets,wait_sec=4,cancel_check=None):
+    if sys.platform!="win32": return _test_strategy_linux(strategy,zapret_dir,targets,wait_sec,cancel_check)
     kill_all_winws(); bat=zapret_dir/f"{strategy}.bat"
     if not bat.exists(): return {"strategy":strategy,"ok":False,"error":"bat not found"}
     proc=None

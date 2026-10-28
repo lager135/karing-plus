@@ -1,0 +1,34 @@
+diff --git a/common/urltest/urltest.go b/common/urltest/urltest.go
+index ee8624f..dd55c85 100644
+--- a/common/urltest/urltest.go
++++ b/common/urltest/urltest.go
+@@ -3,6 +3,7 @@ package urltest
+ import (
+ 	"context"
+ 	"crypto/tls"
++	"io"
+ 	"net"
+ 	"net/http"
+ 	"net/url"
+@@ -127,7 +128,21 @@ func URLTest(ctx context.Context, link string, detour N.Dialer) (t uint16, err e
+ 	if err != nil {
+ 		return
+ 	}
++	_, _ = io.Copy(io.Discard, resp.Body)
+ 	resp.Body.Close()
+ 	t = uint16(time.Since(start) / time.Millisecond)
++	// Karing+: unified delay, like mihomo. The first request also paid for the proxy and TLS
++	// handshakes; a second request over the same kept-alive connection is the round trip a user
++	// actually feels. If the server does not keep the connection, the first result stays.
++	start = time.Now()
++	resp, err2 := client.Do(req.WithContext(ctx))
++	if err2 != nil {
++		return
++	}
++	resp.Body.Close()
++	t = uint16(time.Since(start) / time.Millisecond)
++	if t == 0 {
++		t = 1 // 0 means "failed" to the apps
++	}
+ 	return
+ }

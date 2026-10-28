@@ -1,10 +1,10 @@
-//go:build !windows
+//go:build !windows && !linux
 
 package main
 
 import "errors"
 
-// zapretSupported: the zapret backend (winws) exists for Windows only. On other systems the
+// zapretSupported: the zapret backend exists for Windows and Linux only. On other systems the
 // zapret endpoints answer 501 "not supported" and this type does nothing.
 const zapretSupported = false
 

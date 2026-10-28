@@ -128,4 +128,9 @@ class WindowsPlatform(ZapretPlatform):
         return sorted(f.stem for f in zapret_dir.glob("*.bat") if not f.stem.lower().startswith("service"))
 
 def get_platform():
-    return WindowsPlatform() if sys.platform == "win32" else ZapretPlatform()
+    if sys.platform == "win32":
+        return WindowsPlatform()
+    if sys.platform.startswith("linux"):
+        from core.platforms.linux import LinuxPlatform
+        return LinuxPlatform()
+    return ZapretPlatform()

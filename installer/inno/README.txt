@@ -1,4 +1,4 @@
-﻿Karing+ 0.1.0_b
+﻿Karing+ 0.2.0_b
 ================
 
 VPN-клиент для Windows на базе Karing (автор nebula / KaringX, лицензия GNU GPL v3).

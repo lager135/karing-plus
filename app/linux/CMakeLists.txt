@@ -168,6 +168,15 @@ endif()
 install(PROGRAMS "${KARING_SERVICE_BINARY}" DESTINATION "${CMAKE_INSTALL_PREFIX}"
   COMPONENT Runtime)
 
+# Karing+: bundled zapret (DPI bypass): backend + nfqws, started by the core service as root.
+set(KARING_ZAPRET_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../bind/linux/zapret")
+if(EXISTS "${KARING_ZAPRET_DIR}/backend/zapret-backend")
+  install(DIRECTORY "${KARING_ZAPRET_DIR}/" DESTINATION "${CMAKE_INSTALL_PREFIX}/zapret"
+    USE_SOURCE_PERMISSIONS COMPONENT Runtime)
+else()
+  message(WARNING "Karing+ zapret for Linux not found in ${KARING_ZAPRET_DIR}; building without zapret")
+endif()
+
 # PathUtils.appAssetsDir() on Linux is <exe dir>/assets (geosite/geoip/acl rule sets are read from
 # assets/flutter_assets/assets/datas), while the Flutter engine needs data/flutter_assets.
 # A relative symlink serves both without copying the assets twice.
